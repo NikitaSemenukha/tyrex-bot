@@ -1,15 +1,14 @@
 import { Telegraf, Markup, Context, session } from "telegraf";
 import * as dotenv from "dotenv";
-import express from "express"; // ДОБАВЛЕНО: Для запуска на Render
+import express from "express";
 
 // ==================================================
 // 1. КОНФИГУРАЦИЯ
 // ==================================================
 dotenv.config();
 
-const BOT_TOKEN = process.env.BOT_TOKEN || "";
-const CONSULTANT_CHAT_ID = process.env.CONSULTANT_ID || "";
-// Render выдает порт через process.env.PORT, для локального теста - 3000
+const BOT_TOKEN = process.env.BOT_TOKEN;
+const CONSULTANT_CHAT_ID = process.env.CONSULTANT_ID;
 const PORT = process.env.PORT || 3000; 
 
 if (!BOT_TOKEN) {
