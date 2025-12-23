@@ -6,6 +6,7 @@ import { MyContext } from "./core/types";
 import { t, locales } from "./localization";
 import { getMainMenu, getLangMenu } from "./utils/keyboards";
 import { surveyScene } from "./scenes/survey.scene";
+import { connectDB } from "./database"; // <--- Импорт
 
 // 1. Инициализация
 const bot = new Telegraf<MyContext>(config.BOT_TOKEN);
@@ -76,13 +77,17 @@ bot.on("text", async (ctx) => {
     }
 });
 
-// 4. Запуск веб-сервера (для Render/Heroku)
-const app = express();
-app.get('/', (req, res) => res.send('Tyrex Bot Running'));
-app.listen(config.PORT, () => console.log(`🌍 Server on port ${config.PORT}`));
+const startApp = async () => {
+    await connectDB();
 
-// 5. Запуск бота
-bot.launch().then(() => console.log("🚀 Bot started"));
+    const app = express();
+    app.get('/', (req, res) => res.send('Tyrex Bot with Mongo is Running'));
+    app.listen(config.PORT, () => console.log(`🌍 Server on port ${config.PORT}`));
+
+    bot.launch().then(() => console.log("🚀 Bot started"));
+};
+
+startApp();
 
 process.once('SIGINT', () => bot.stop('SIGINT'));
 process.once('SIGTERM', () => bot.stop('SIGTERM'));
